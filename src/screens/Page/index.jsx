@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Image, Alert } from 'react-native';
+import { View, Text, Button, Image, Alert, ActivityIndicator } from 'react-native';
 
 import { styles } from './styles';
 import { Card } from '../../components';
 import { theme } from '../../constants';
-export const Page = ({ name, onHandlerStartPage }) => {
+export const Page = ({ name, onHandlerStartPage, navigation, route }) => {
   const randomTicket = (max) => {
     return Math.floor(Math.random() * max);
   };
   const [ticketConfirmed, setTicketConfirmed] = useState(false);
 
+  const { datos } = route.params;
+
   const TicketObtenido = () =>
     ticketConfirmed ? (
       <Card style={styles.ticketObtenido}>
-        <Text style={styles.titleTicket}>Felicidades {name}, estás en la fila!</Text>
+        <Text style={styles.titleTicket}>Felicidades {datos}, estás en la fila!</Text>
         <Text style={styles.titleTicket1}>Tu número en la fila es {randomTicket(200)}</Text>
         <Text style={styles.titleTicket2}>Guarda el ticket para más tarde</Text>
         <Image
@@ -22,10 +24,13 @@ export const Page = ({ name, onHandlerStartPage }) => {
             uri: 'https://i.blogs.es/305b67/2013_04_04_barcode1/450_1000.jpg',
           }}
         />
+
         <View style={styles.buttonStartPageContainer}>
           <Button
             title="Volver a la pagina principal"
-            onPress={onHandlerStartPage}
+            onPress={() => {
+              navigation.navigate('StartPage');
+            }}
             color={theme.colors.orange}
           />
         </View>
@@ -37,7 +42,7 @@ export const Page = ({ name, onHandlerStartPage }) => {
       'Entendemos que no quieras esperar, pronto dispondremos de más tiempo',
       [{ text: 'Ok', style: 'Cancel' }]
     );
-    onHandlerStartPage();
+    navigation.navigate('StartPage');
   };
   const onHandlerConfirm = () => {
     setTicketConfirmed(true);
@@ -46,7 +51,7 @@ export const Page = ({ name, onHandlerStartPage }) => {
   return (
     <View style={styles.container}>
       <Card style={styles.content}>
-        <Text style={styles.title}>Hola {name}, </Text>
+        <Text style={styles.title}>Hola {datos}, </Text>
         <Text style={styles.title2}>
           En este momento nos encontramos en mantenimiento, toma tu ticket, y espera a ser atendido!
         </Text>
