@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 import { theme } from '../../constants';
-
+const { height } = Dimensions.get('window');
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: 40,
     width: '90%',
-    height: '45%',
+    height: height * 0.5,
   },
   titleTicket: {
     fontWeight: 'bold',
@@ -62,9 +62,9 @@ export const styles = StyleSheet.create({
   },
   image: {
     marginTop: 8,
-    marginBottom: 15,
+    marginBottom: 5,
     marginHorizontal: 30,
     width: '80%',
-    height: 150,
+    height: height * 0.25,
   },
 });

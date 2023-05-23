@@ -1,33 +1,39 @@
 import React, { useState } from 'react';
 import { Text, TextInput, Button, View, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { styles } from './styles';
 import { Card } from '../../components/index';
 import { theme } from '../../constants';
+import { setInput } from '../../store/actions/index';
 
 const StartPage = ({ onChangePage, navigation }) => {
+  const dispatch = useDispatch();
+  const input = useSelector((state) => state.input.inputValue);
   const [onInputEditable, setOnInputEditable] = useState(true);
   const [userName, setUserName] = useState('');
-  const [selectedName, setSelectedName] = useState(null);
+
   const [confirmed, setConfirmed] = useState(false);
   const onHandlerChangeText = (text) => {
     setUserName(text);
   };
+
   const onHandlerConfirm = () => {
+    dispatch(setInput(userName));
     setConfirmed(true);
-    setSelectedName(userName);
+
     setUserName('');
     setOnInputEditable(false);
   };
   const onHandlerNextPage = () => {
     setConfirmed(false);
     setOnInputEditable(true);
-    navigation.navigate('Page', { datos: selectedName });
+    navigation.navigate('Page');
   };
 
   const onHandlerReset = () => {
     setConfirmed(false);
-    setSelectedName(null);
+
     setUserName('');
     setOnInputEditable(true);
   };
@@ -35,7 +41,7 @@ const StartPage = ({ onChangePage, navigation }) => {
   const Confirmed = () =>
     confirmed ? (
       <Card style={styles.confirmedContainer}>
-        <Text style={styles.confirmedTitle}>Hola {selectedName}</Text>
+        <Text style={styles.confirmedTitle}>Hola {input}</Text>
         <Text style={styles.nextTitle}>Te invitamos a que presiones el siguiente boton</Text>
         <Button title="Continuar" color={theme.colors.greenSoft} onPress={onHandlerNextPage} />
         <Button title="Reset" color={theme.colors.orange} onPress={onHandlerReset} />

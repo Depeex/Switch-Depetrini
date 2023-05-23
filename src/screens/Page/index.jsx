@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Image, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, Button, Image, Alert } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import { styles } from './styles';
 import { Card } from '../../components';
 import { theme } from '../../constants';
-export const Page = ({ name, onHandlerStartPage, navigation, route }) => {
+export const Page = ({ onHandlerStartPage, navigation, route }) => {
+  const input = useSelector((state) => state.input.inputValue);
   const randomTicket = (max) => {
     return Math.floor(Math.random() * max);
   };
   const [ticketConfirmed, setTicketConfirmed] = useState(false);
 
-  const { datos } = route.params;
-
   const TicketObtenido = () =>
     ticketConfirmed ? (
       <Card style={styles.ticketObtenido}>
-        <Text style={styles.titleTicket}>Felicidades {datos}, estás en la fila!</Text>
+        <Text style={styles.titleTicket}>Felicidades {input}, estás en la fila!</Text>
         <Text style={styles.titleTicket1}>Tu número en la fila es {randomTicket(200)}</Text>
         <Text style={styles.titleTicket2}>Guarda el ticket para más tarde</Text>
         <Image
@@ -29,7 +29,7 @@ export const Page = ({ name, onHandlerStartPage, navigation, route }) => {
           <Button
             title="Volver a la pagina principal"
             onPress={() => {
-              navigation.navigate('StartPage');
+              navigation.goBack();
             }}
             color={theme.colors.orange}
           />
@@ -42,7 +42,7 @@ export const Page = ({ name, onHandlerStartPage, navigation, route }) => {
       'Entendemos que no quieras esperar, pronto dispondremos de más tiempo',
       [{ text: 'Ok', style: 'Cancel' }]
     );
-    navigation.navigate('StartPage');
+    navigation.goBack();
   };
   const onHandlerConfirm = () => {
     setTicketConfirmed(true);
@@ -51,7 +51,7 @@ export const Page = ({ name, onHandlerStartPage, navigation, route }) => {
   return (
     <View style={styles.container}>
       <Card style={styles.content}>
-        <Text style={styles.title}>Hola {datos}, </Text>
+        <Text style={styles.title}>Hola {input}, </Text>
         <Text style={styles.title2}>
           En este momento nos encontramos en mantenimiento, toma tu ticket, y espera a ser atendido!
         </Text>
